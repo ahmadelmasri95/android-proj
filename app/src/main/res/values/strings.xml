@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PersonalTracker</string>
+    <string name="app_main_button">app_main_button</string>
+    <string name="app_title">Personal Tracker</string>
 </resources>
