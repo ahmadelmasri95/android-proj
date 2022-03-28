@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/black"
+    android:id="@+id/my_main_id"
     tools:context=".MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="6dp"
-        android:background="@color/white">
+        android:layout_margin="4dp"
+        android:background="@color/grey">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/my_toolbar"
@@ -33,7 +34,7 @@
                     android:id="@+id/toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:text="@string/app_title"
                     android:textColor="@color/white"
                     android:textSize="14sp"
@@ -51,6 +52,7 @@
             android:clickable="true"
             android:contentDescription="@string/app_main_button"
             android:focusable="true"
+            app:backgroundTint="@color/white"
             app:srcCompat="@drawable/ic_baseline_place_24"
             tools:ignore="SpeakableTextPresentCheck" />
 
