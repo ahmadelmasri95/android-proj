@@ -1,5 +1,10 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">PersonalTracker</string>
     <string name="app_main_button">app_main_button</string>
     <string name="app_title">Personal Activity Tracker</string>
+
+    <string name="bold" tools:ignore="ReferenceType">@font/roboto_bold</string>
+    <string name="light" tools:ignore="ReferenceType">@font/roboto_light</string>
+    <string name="regular" tools:ignore="ReferenceType">@font/roboto_regular</string>
+
 </resources>
