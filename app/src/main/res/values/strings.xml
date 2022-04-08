@@ -6,5 +6,8 @@
     <string name="bold" tools:ignore="ReferenceType">@font/roboto_bold</string>
     <string name="light" tools:ignore="ReferenceType">@font/roboto_light</string>
     <string name="regular" tools:ignore="ReferenceType">@font/roboto_regular</string>
+    <string name="your_daily_geeky_dose">Your Daily Geeky Dose</string>
+    <string name="todo">TODO</string>
+    <string name="try_me">Try Me</string>
 
 </resources>
