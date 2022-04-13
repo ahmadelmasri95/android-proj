@@ -16,4 +16,5 @@ public class ApiUtilities {
         }
         return retrofit.create(ApiInterface.class);
     }
+    //add another method here for another retrofit object, if i want another base URL
 }

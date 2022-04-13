@@ -1,51 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_main_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/blue"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <RelativeLayout
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="460dp"
-        android:background="@color/design_default_color_secondary">
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/pink"
+        android:indeterminateTintMode="src_atop" />
+
+    <ImageView
+        android:id="@+id/bored1"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_below="@id/progressBar"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="60dp"
+        android:contentDescription="@string/boredface"
+        android:src="@drawable/ic_bored_face">
+
+    </ImageView>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/bored1"
+        android:layout_marginTop="10dp">
 
         <ImageView
-            android:id="@+id/bored1"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/ic_bored_face">
+            android:id="@+id/img_animation2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/circle" />
 
-        </ImageView>
+        <ImageView
+            android:id="@+id/img_animation"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/circle" />
 
-        <TextView
-            android:id="@+id/joke_text"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/searchButton"
+            style="@style/AppTheme.ButtonStyle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:text="Search" />
+    </FrameLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            style="@style/Widget.MaterialComponents.BottomAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bored1"
-            android:layout_marginTop="60dp"
-            android:gravity="center"
-            android:text="Here is the lame joke !"
-            android:textSize="@dimen/title_size"
-            android:textStyle="normal" />
-    </RelativeLayout>
+            android:layout_gravity="bottom"
+            android:backgroundTint="@color/color_primary_dark"
+            app:fabAlignmentMode="end"
+            app:fabCradleMargin="4dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/pink"
+            android:contentDescription="@string/appbarfab"
+            android:src="@drawable/ic_baseline_toys_24"
+            app:layout_anchor="@id/bottom_app_bar" />
 
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
-        android:background="@color/color_primary"
-        android:text="@string/try_me"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
-
-</LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

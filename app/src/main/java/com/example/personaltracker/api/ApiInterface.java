@@ -4,11 +4,12 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Url;
 
 public interface ApiInterface {
 
-    static final String BASE_URL = "https://geek-jokes.sameerkumar.website";
+    static final String BASE_URL = "https://www.boredapi.com/api/";
 
-    @GET("/api?format=json")
-    Call<Joke> getJokes();
+    @GET
+    Call<Plan> getPlan(@Url String url);
 }
