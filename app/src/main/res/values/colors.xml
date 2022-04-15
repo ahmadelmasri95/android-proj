@@ -22,5 +22,6 @@
     <color name="blue_pie">#007afe</color>
     <color name="red_pie">#F6404F</color>
     <color name="green_pie">#08a045</color>
+    <color name="dark_grey">#3D4140</color>
 
 </resources>

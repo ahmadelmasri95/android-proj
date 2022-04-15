@@ -1,5 +1,7 @@
 package com.example.personaltracker.api;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Plan { //  Model class
@@ -11,6 +13,7 @@ public class Plan { //  Model class
 
     public Plan() {
     }
+
     public String getActivity() {
         return activity;
     }
@@ -19,5 +22,12 @@ public class Plan { //  Model class
         return type;
     }
 
-
+    @NonNull
+    @Override
+    public String toString() {
+        return "Plan{" +
+                "activity='" + activity + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

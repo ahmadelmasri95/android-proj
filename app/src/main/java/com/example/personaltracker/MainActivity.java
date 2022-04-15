@@ -1,14 +1,9 @@
 package com.example.personaltracker;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
@@ -17,8 +12,10 @@ import android.widget.Toast;
 
 import com.example.personaltracker.api.ApiUtilities;
 import com.example.personaltracker.api.Plan;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,11 +27,12 @@ and displays to user after searching
 * */
 public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionButton floatingActionButton;
+    //for progressBar alert
     private ProgressBar progressBar;
+    private Handler alertHandler;
 
     //retrieved data from boredApi
-    private Plan plan;
+    private List<Plan> plans;
 
     //for the animated button
     private AppCompatButton button;
@@ -43,19 +41,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageAnimation;
     private ImageView imageAnimation2;
 
-
+    //check if can use one handler for all the runnables
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //initialize MainActivity views
         init();
-
-        //progressBar idle at first
-        progressBar.setIndeterminate(false);
-
-
         //Create searchButton pulse animations and change state of selector
         button.setOnClickListener(v -> {
             if (AnimationStatus) {
@@ -68,50 +60,23 @@ public class MainActivity extends AppCompatActivity {
             AnimationStatus = !AnimationStatus;
         });
 
-        //Go to next Activity, & other processing
-        floatingActionButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-            startActivity(intent);
-        });
-
-        //Asynchronous call rest api call
-        ApiUtilities.getApiInterface().getPlan("activity")
-                .enqueue(new Callback<Plan>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Plan> call, @NonNull Response<Plan> response) {
-                        if (response.isSuccessful()) {
-                            if (response.body() != null) {
-                                plan = (response.body());
-                            }
-                        } else {
-                            Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<Plan> call, @NonNull Throwable t) {
-                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
     }
 
     public void init() {
-        floatingActionButton = this.findViewById(R.id.fab);
         progressBar = this.findViewById(R.id.progressBar);
         button = this.findViewById(R.id.searchButton);
         imageAnimation = this.findViewById(R.id.img_animation);
         imageAnimation2 = this.findViewById(R.id.img_animation2);
-        plan = new Plan();
+        plans = new ArrayList<>();
         animationHandler = new Handler(this.getMainLooper());
+        alertHandler = new Handler(this.getMainLooper());
 
     }
 
     public void startPulse() {
-        animationHandler.post(runnable);
-        progressBar.setIndeterminate(true);
-
+        animationHandler.post(animationRunnable);
+        alertHandler.postDelayed(progressRunnable, 8000);
+        getAndClusterData();
         //if we find a match on the plan with the map, change color of progressbar
 //        progressBar.getIndeterminateDrawable().setColorFilter(
 //                getResources().getColor(R.color.green),
@@ -119,14 +84,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stopPulse() {
-        animationHandler.removeCallbacks(runnable);
+        animationHandler.removeCallbacks(animationRunnable);
+        alertHandler.removeCallbacks(progressRunnable);
         progressBar.setIndeterminate(false);
+        Toast.makeText(this, String.valueOf(plans.size()), Toast.LENGTH_LONG).show();
     }
 
-    private final Runnable runnable = new Runnable() {
+    public void getAndClusterData() {
+        //Asynchronous rest api call - GET
+        //Group plans by type in a hashMap<String i.e. "type", List<String> i.e. "activities">
+        for (int i = 0; i < 15; i++) {
+            ApiUtilities.getApiInterface().getPlan("activity")
+                    .enqueue(new Callback<Plan>() {
+                        @Override
+                        public void onResponse(@NonNull Call<Plan> call, @NonNull Response<Plan> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body() != null) {
+                                    plans.add(response.body());
+                                }
+                            } else {
+                                Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<Plan> call, @NonNull Throwable t) {
+                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    private final Runnable animationRunnable = new Runnable() {
+        //Animates the main search button
         @Override
         public void run() {
-            imageAnimation.animate().scaleX(4f).scaleY(4f).alpha(0f).setDuration(700)
+            imageAnimation.animate().scaleX(4f).scaleY(4f).alpha(0f).setDuration(900)
                     .withEndAction(new Runnable() {
                         @Override
                         public void run() {
@@ -135,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                             imageAnimation.setAlpha(1f);
                         }
                     });
-            imageAnimation2.animate().scaleX(4f).scaleY(4f).alpha(0f).setDuration(400)
+            imageAnimation2.animate().scaleX(4f).scaleY(4f).alpha(0f).setDuration(600)
                     .withEndAction(new Runnable() {
                         @Override
                         public void run() {
@@ -145,6 +138,13 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
             animationHandler.postDelayed(this, 1500);
+        }
+    };
+
+    private final Runnable progressRunnable = new Runnable() {
+        @Override
+        public void run() {
+            progressBar.setIndeterminate(true);
         }
     };
 
