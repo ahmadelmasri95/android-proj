@@ -11,5 +11,8 @@
     <string name="try_me">Try Me</string>
     <string name="appbarfab">appBarFAB</string>
     <string name="enter_your_name">Enter your name</string>
+    <string name="title_activity_maps_app">MapsApp</string>
+    <string name="main_title">I-Search</string>
+    <string name="hint_text">Enter desired keyword</string>
 
 </resources>

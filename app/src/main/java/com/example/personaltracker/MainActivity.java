@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.personaltracker.api.ApiUtilities;
 import com.example.personaltracker.api.Plan;
+import com.google.android.material.textfield.TextInputEditText;
 
 
 import java.util.ArrayList;
@@ -21,10 +23,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/* This app mainly gets data from BoredAPI, then according
-to the random information, checks for nearby activities on a map
-and displays to user after searching
+/* This app mainly gets data from X, then
+.....
 * */
+
 public class MainActivity extends AppCompatActivity {
 
     //for progressBar alert
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean AnimationStatus = false;
     private ImageView imageAnimation;
     private ImageView imageAnimation2;
+    private TextInputEditText textInputEditText;
 
     //check if can use one handler for all the runnables
     @Override
@@ -59,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
             }
             AnimationStatus = !AnimationStatus;
         });
-
     }
 
     public void init() {
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         plans = new ArrayList<>();
         animationHandler = new Handler(this.getMainLooper());
         alertHandler = new Handler(this.getMainLooper());
-
+        textInputEditText = this.findViewById(R.id.search_editText);
     }
 
     public void startPulse() {
@@ -87,12 +89,14 @@ public class MainActivity extends AppCompatActivity {
         animationHandler.removeCallbacks(animationRunnable);
         alertHandler.removeCallbacks(progressRunnable);
         progressBar.setIndeterminate(false);
-        Toast.makeText(this, String.valueOf(plans.size()), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, String.valueOf(plans.size()) + " " + textInputEditText.getText(), Toast.LENGTH_LONG).show();
+
     }
 
     public void getAndClusterData() {
         //Asynchronous rest api call - GET
-        //Group plans by type in a hashMap<String i.e. "type", List<String> i.e. "activities">
+
+
         for (int i = 0; i < 15; i++) {
             ApiUtilities.getApiInterface().getPlan("activity")
                     .enqueue(new Callback<Plan>() {
