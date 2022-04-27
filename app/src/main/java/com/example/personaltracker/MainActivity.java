@@ -1,10 +1,12 @@
 package com.example.personaltracker;
 
+import static retrofit2.Response.error;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
@@ -12,20 +14,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.personaltracker.api.ApiUtilities;
-import com.example.personaltracker.api.Plan;
-import com.google.android.material.textfield.TextInputEditText;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/* This app mainly gets data from X, then
-.....
-* */
+/* This app :
+-
+ */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Handler alertHandler;
 
-    //retrieved data from boredApi
-    private List<Plan> plans;
 
     //for the animated button
     private AppCompatButton button;
@@ -42,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean AnimationStatus = false;
     private ImageView imageAnimation;
     private ImageView imageAnimation2;
-    private TextInputEditText textInputEditText;
+    private ImageView imageView;
 
-    //check if can use one handler for all the runnables
+    //check if can use one handler for all the runnable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(v -> {
             if (AnimationStatus) {
                 stopPulse();
-                button.setText("Search");
+                button.setText(R.string.button_initial_state);
             } else {
                 startPulse();
-                button.setText("Stop");
+                button.setText(R.string.button_secondary_state);
             }
             AnimationStatus = !AnimationStatus;
         });
@@ -69,17 +64,26 @@ public class MainActivity extends AppCompatActivity {
         button = this.findViewById(R.id.searchButton);
         imageAnimation = this.findViewById(R.id.img_animation);
         imageAnimation2 = this.findViewById(R.id.img_animation2);
-        plans = new ArrayList<>();
         animationHandler = new Handler(this.getMainLooper());
         alertHandler = new Handler(this.getMainLooper());
-        textInputEditText = this.findViewById(R.id.search_editText);
+        imageView = this.findViewById(R.id.bored1);
     }
 
     public void startPulse() {
         animationHandler.post(animationRunnable);
         alertHandler.postDelayed(progressRunnable, 8000);
-        getAndClusterData();
-        //if we find a match on the plan with the map, change color of progressbar
+        //  getData();
+
+//        RequestOptions options = new RequestOptions()
+//                .centerCrop()
+//                .placeholder(R.mipmap.ic_launcher_round)
+//                .error(R.mipmap.ic_launcher_round);
+//        Glide.with(this)
+//                .load("https://image.thum.io/get/auth/57066-Masri/png/" + textInputEditText.getText().toString())
+//                .into(imageView);
+
+
+        //to change color of progressbar
 //        progressBar.getIndeterminateDrawable().setColorFilter(
 //                getResources().getColor(R.color.green),
 //                android.graphics.PorterDuff.Mode.SRC_IN);
@@ -89,34 +93,29 @@ public class MainActivity extends AppCompatActivity {
         animationHandler.removeCallbacks(animationRunnable);
         alertHandler.removeCallbacks(progressRunnable);
         progressBar.setIndeterminate(false);
-        Toast.makeText(this, String.valueOf(plans.size()) + " " + textInputEditText.getText(), Toast.LENGTH_LONG).show();
 
     }
 
-    public void getAndClusterData() {
+    public void getData() {
         //Asynchronous rest api call - GET
-
-
-        for (int i = 0; i < 15; i++) {
-            ApiUtilities.getApiInterface().getPlan("activity")
-                    .enqueue(new Callback<Plan>() {
-                        @Override
-                        public void onResponse(@NonNull Call<Plan> call, @NonNull Response<Plan> response) {
-                            if (response.isSuccessful()) {
-                                if (response.body() != null) {
-                                    plans.add(response.body());
-                                }
-                            } else {
-                                Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+        ApiUtilities.getApiInterface().getScreenshot("https://www.nba.com")
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
                             }
-                        }
 
-                        @Override
-                        public void onFailure(@NonNull Call<Plan> call, @NonNull Throwable t) {
-                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
                         }
-                    });
-        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private final Runnable animationRunnable = new Runnable() {
@@ -124,22 +123,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             imageAnimation.animate().scaleX(4f).scaleY(4f).alpha(0f).setDuration(900)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            imageAnimation.setScaleX(1f);
-                            imageAnimation.setScaleY(1f);
-                            imageAnimation.setAlpha(1f);
-                        }
+                    .withEndAction(() -> {
+                        imageAnimation.setScaleX(1f);
+                        imageAnimation.setScaleY(1f);
+                        imageAnimation.setAlpha(1f);
                     });
             imageAnimation2.animate().scaleX(4f).scaleY(4f).alpha(0f).setDuration(600)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            imageAnimation.setScaleX(1f);
-                            imageAnimation.setScaleY(1f);
-                            imageAnimation.setAlpha(1f);
-                        }
+                    .withEndAction(() -> {
+                        imageAnimation.setScaleX(1f);
+                        imageAnimation.setScaleY(1f);
+                        imageAnimation.setAlpha(1f);
                     });
             animationHandler.postDelayed(this, 1500);
         }
