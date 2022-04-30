@@ -12,7 +12,7 @@
     <string name="appbarfab">appBarFAB</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="title_activity_maps_app">MapsApp</string>
-    <string name="main_title">Personal Notifier</string>
+    <string name="main_title">Location Notifier</string>
     <string name="hint_text">Enter desired keyword</string>
     <string name="button_initial_state">Search</string>
     <string name="button_secondary_state">Stop</string>
