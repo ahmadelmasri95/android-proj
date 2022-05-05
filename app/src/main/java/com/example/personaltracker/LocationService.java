@@ -1,6 +1,7 @@
 package com.example.personaltracker;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -58,6 +59,7 @@ public class LocationService extends Service {
         throw new UnsupportedOperationException("Not yet Implemented");
     }
 
+    @SuppressLint("MissingPermission")
     public void startLocationService() {
         String channelId = "location_notification_channel";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -120,6 +122,8 @@ public class LocationService extends Service {
             }
         }
         //can return START_STICKY if i want background service to run forever until stopped
+        //Return START_STICKY from onStartCommand() to make sure you get restarted by the
+        // system in case your app still gets killed at a low-memory situation.
         return super.onStartCommand(intent, flags, startId);
     }
 }

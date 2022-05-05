@@ -5,6 +5,7 @@ import static retrofit2.Response.error;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -18,11 +19,14 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.personaltracker.api.ApiUtilities;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.textview.MaterialTextView;
 
 import okhttp3.ResponseBody;
@@ -46,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean AnimationStatus = false;
     private ImageView imageAnimation;
     private ImageView imageAnimation2;
-    private ImageView imageView;
-    private MaterialTextView textView;
+    private BottomAppBar bottomAppBar;
+    private static double currentLongitude;
+    private static double currentLatitude;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     //check if can use one handler for all the runnable
@@ -79,12 +84,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            double latitude = intent.getDoubleExtra("lati", 0);
-            double longitude = intent.getDoubleExtra("longi", 0);
-            textView.setText(latitude + " " + longitude);
+            currentLatitude = intent.getDoubleExtra("lati", 0);
+            currentLongitude = intent.getDoubleExtra("longi", 0);
         }
     };
 
@@ -99,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             if (AnimationStatus) {
                 stopLocationService();
                 stopPulse();
-                button.setText(R.string.button_initial_state);
+                //        button.setText(R.string.button_initial_state);
             } else {
                 if (ContextCompat.checkSelfPermission(getApplicationContext(),
                         Manifest.permission.ACCESS_FINE_LOCATION)
@@ -111,9 +115,28 @@ public class MainActivity extends AppCompatActivity {
                     startLocationService();
                 }
                 startPulse();
-                button.setText(R.string.button_secondary_state);
+                //            button.setText(R.string.button_secondary_state);
             }
             AnimationStatus = !AnimationStatus;
+        });
+        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.mapIcon) {
+                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                    //if below not null
+                    intent.putExtra("Longitude", currentLongitude);
+                    intent.putExtra("Latitude", currentLatitude);
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
         });
     }
 
@@ -128,12 +151,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        if (AnimationStatus) {
+            startLocationService();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
     }
 
     @Override
@@ -149,8 +175,7 @@ public class MainActivity extends AppCompatActivity {
         imageAnimation2 = this.findViewById(R.id.img_animation2);
         animationHandler = new Handler(this.getMainLooper());
         alertHandler = new Handler(this.getMainLooper());
-        imageView = this.findViewById(R.id.bored1);
-        textView = this.findViewById(R.id.coordinates);
+        bottomAppBar = this.findViewById(R.id.bottomAppBar);
     }
 
     private void startPulse() {
@@ -159,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         //  getData();
 
-//        RequaestOptions options = new RequestOptions()
+//        RequestOptions options = new RequestOptions()
 //                .centerCrop()
 //                .placeholder(R.mipmap.ic_launcher_round)
 //                .error(R.mipmap.ic_launcher_round);
@@ -250,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        stopLocationService();
         super.onDestroy();
     }
 }

@@ -4,12 +4,12 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Screenshot { //  Model class
+public class Place { //  Model class
 
 
     //the rest api used returns a png directly
 
-    public Screenshot() {
+    public Place() {
     }
 
     @Override

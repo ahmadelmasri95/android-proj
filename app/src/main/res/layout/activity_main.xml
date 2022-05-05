@@ -25,30 +25,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/progressBar"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="100dp"
         android:layout_marginRight="20dp"
         android:gravity="center"
         android:text="@string/main_title"
         android:textColor="@color/white"
-        android:textSize="@dimen/title_size"
+        android:textSize="@dimen/title_size2"
         android:textStyle="normal" />
-
-    <ImageView
-        android:id="@+id/bored1"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_below="@id/main_title"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="40dp"
-        android:contentDescription="@string/boredface"
-        android:src="@drawable/ic_bored_face" />
-
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/bored1"
+        android:layout_below="@+id/main_title"
         android:layout_centerInParent="true"
         android:layout_marginTop="20dp"
         android:background="@color/dark_grey">
@@ -58,7 +47,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="40dp"
             android:src="@drawable/circle" />
 
         <ImageView
@@ -66,15 +55,15 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="40dp"
             android:src="@drawable/circle" />
 
         <ImageView
             android:id="@+id/static_circle_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="40dp"
             android:src="@drawable/circle2" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -83,22 +72,25 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
-            android:text="Search" />
+            android:layout_marginBottom="40dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/coordinates"
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_gravity="bottom"
-            android:gravity="center"
-            android:text="@string/main_title"
-            android:textColor="@color/white"
-            android:textSize="@dimen/title_size"
-            android:textStyle="normal" />
+            android:layout_gravity="bottom">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottomAppBar"
+                style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/dark_grey"
+                app:menu="@menu/bottom_app_bar"
+                app:navigationIcon="@drawable/ic_baseline_menu_24" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </FrameLayout>
+
 
 </RelativeLayout>
