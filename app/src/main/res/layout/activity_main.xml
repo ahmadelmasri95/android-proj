@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/dark_grey"
                 app:menu="@menu/bottom_app_bar"
-                app:navigationIcon="@drawable/ic_baseline_menu_24" />
+                app:navigationIcon="@drawable/ic_baseline_table_chart_24" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </FrameLayout>
 

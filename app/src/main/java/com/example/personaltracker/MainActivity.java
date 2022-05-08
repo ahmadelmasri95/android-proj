@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -50,10 +51,15 @@ public class MainActivity extends AppCompatActivity {
     private boolean AnimationStatus = false;
     private ImageView imageAnimation;
     private ImageView imageAnimation2;
+    //bottom app bar
     private BottomAppBar bottomAppBar;
+    //for location
     private static double currentLongitude;
     private static double currentLatitude;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    //for popup
+    private Dialog popup_dialog;
+    private MaterialTextView popup_close_text;
 
     //check if can use one handler for all the runnable
 
@@ -122,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
         bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.animate().rotationBy(23);
+                showPopup();
             }
         });
         bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -176,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         animationHandler = new Handler(this.getMainLooper());
         alertHandler = new Handler(this.getMainLooper());
         bottomAppBar = this.findViewById(R.id.bottomAppBar);
+        popup_dialog = new Dialog(MainActivity.this);
     }
 
     private void startPulse() {
@@ -271,6 +280,18 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return false;
+    }
+
+    private void showPopup() {
+        popup_dialog.setContentView(R.layout.charts_popup);
+        popup_close_text = (MaterialTextView) popup_dialog.findViewById(R.id.popup_close);
+        popup_close_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup_dialog.dismiss();
+            }
+        });
+        popup_dialog.show();
     }
 
     @Override

@@ -5,7 +5,7 @@
     <item
         android:id="@+id/mapIcon"
         android:contentDescription="Map"
-        android:icon="@drawable/ic_baseline_maps_ugc_24"
+        android:icon="@drawable/ic_baseline_place_24"
         android:title="Map"
         app:showAsAction="always" />
 
